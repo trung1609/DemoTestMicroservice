@@ -25,10 +25,20 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     private final ReactiveRedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
+    private final List<String> openApiEndpoints = List.of(
+            "api/auth/login",
+            "api/auth/register",
+            "api/auth/refresh"
+    );
+
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+
+        if (openApiEndpoints.stream().anyMatch(path -> request.getURI().getPath().contains(path))) {
+            return chain.filter(exchange);
+        }
 
         String authHeader = request.getHeaders().getFirst("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")){

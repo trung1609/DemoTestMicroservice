@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final StringRedisTemplate redisTemplate;
 
@@ -37,9 +36,10 @@ public class AuthService {
     private long expirationAccessToken;
 
     public String register(FormRegister formRegister){
-        Users users = userRepository.findByUsername(formRegister.getUsername()).orElseThrow(
-                () -> new RuntimeException("User not found")
-        );
+        if (userRepository.findByUsername(formRegister.getUsername()).isPresent()){
+            throw new RuntimeException("Username already exists");
+        }
+        Users users = new Users();
         users.setUsername(formRegister.getUsername());
         users.setPassword(passwordEncoder.encode(formRegister.getPassword()));
         users.setRoles(formRegister.getRoles());
@@ -49,17 +49,16 @@ public class AuthService {
     }
 
     public JwtResponse login(FormLogin formLogin){
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        formLogin.getUsername(),
-                        formLogin.getPassword()
-                )
+        Users users = userRepository.findByUsername(formLogin.getUsername()).orElseThrow(
+                () -> new JwtException("Invalid username or password")
         );
-        Users users = (Users) authentication.getPrincipal();
+        if (!passwordEncoder.matches(formLogin.getPassword(), users.getPassword())){
+            throw new JwtException("Invalid username or password");
+        }
         String accessToken = jwtProvider.generateAccessToken(users);
         String refreshToken = jwtProvider.generateRefreshToken(users);
 
-        redisTemplate.opsForValue().set("refreshToken:" + refreshToken, users.getUsername(), expirationRefreshToken, TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set("refreshToken:" + refreshToken, "refreshToken" , expirationRefreshToken, TimeUnit.MILLISECONDS);
         return JwtResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -105,7 +104,7 @@ public class AuthService {
             long expiration = jwtProvider.extractAllClaims(accessToken).getExpiration().getTime();
             long ttl = expiration - System.currentTimeMillis();
             if (ttl > 0){
-                redisTemplate.opsForValue().set("blacklist:"+accessToken, accessToken, expirationAccessToken, TimeUnit.MILLISECONDS);
+                redisTemplate.opsForValue().set("blacklist:"+accessToken, "revoked", expirationAccessToken, TimeUnit.MILLISECONDS);
             }
         }catch (ExpiredJwtException e){
 

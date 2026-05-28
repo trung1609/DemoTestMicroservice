@@ -39,8 +39,8 @@ public class JwtProvider {
         claims.put("jti", jti);
         claims.put("type", "access");
         return Jwts.builder()
-                .setSubject(user.getUsername())
                 .setClaims(claims)
+                .setSubject(user.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expirationAccessToken))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -56,8 +56,8 @@ public class JwtProvider {
         claims.put("jti", jti);
         claims.put("type", "refresh");
         return Jwts.builder()
-                .setSubject(user.getUsername())
                 .setClaims(claims)
+                .setSubject(user.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expirationRefreshToken))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)

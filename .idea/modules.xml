@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/DemoTestMicroservice.iml" filepath="$PROJECT_DIR$/.idea/DemoTestMicroservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/identity-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/identity-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notification-service/notification-service.iml" filepath="$PROJECT_DIR$/notification-service/notification-service.iml" />
     </modules>
   </component>
 </project>

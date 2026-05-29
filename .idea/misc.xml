@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/config-server" />
+    <file type="web" url="file://$PROJECT_DIR$/eureka-server" />
     <file type="web" url="file://$PROJECT_DIR$/identity-service" />
+    <file type="web" url="file://$PROJECT_DIR$/product-service" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_24" default="true" project-jdk-name="24" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />

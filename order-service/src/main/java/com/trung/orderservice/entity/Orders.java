@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -22,5 +24,5 @@ public class Orders {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 }

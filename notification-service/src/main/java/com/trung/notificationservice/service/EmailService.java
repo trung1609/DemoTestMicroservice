@@ -19,16 +19,16 @@ public class EmailService {
 
     @KafkaListener(topics = "order-create-topic", groupId = "notification-service")
     public void handleNotification(OrderCreateEvent event){
-//        String to = event.getUserEmail();
-//        Long orderId = event.getOrderId();
-//        String productName = event.getProductName();
-//        sendOrderConfirmationEmail(to, orderId, productName);
-
         String to = event.getUserEmail();
-        String subject = "Hi " + event.getUserEmail() + ", here is your reminder!";
-        String content = "Wake up early tomorrow and clean the house.";
+        Long orderId = event.getOrderId();
+        String productName = event.getProductName();
+        sendOrderConfirmationEmail(to, orderId, productName);
 
-        sendEmail(to, subject, content);
+//        String to = event.getUserEmail();
+//        String subject = "Hi " + event.getUserEmail() + ", here is your reminder!";
+//        String content = "Wake up early tomorrow and clean the house.";
+//
+//        sendEmail(to, subject, content);
     }
 
     public void sendOrderConfirmationEmail(String to, Long orderId, String productName) {

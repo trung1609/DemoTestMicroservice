@@ -2,13 +2,19 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.46/a5cfe99fdf320e84955ef653f2ce1bf789d11385/lombok-1.18.46.jar" />
         </processorPath>
+<<<<<<< HEAD
         <module name="product-service.main" />
         <module name="product-service.test" />
+=======
+        <module name="eureka-server.main" />
+        <module name="eureka-server.test" />
+>>>>>>> 267d677f1aca503df3a49232a96d20f6c09fec42
       </profile>
     </annotationProcessing>
   </component>
@@ -26,6 +32,9 @@
       <module name="identity-service" options="-parameters" />
       <module name="identity-service.main" options="-parameters" />
       <module name="identity-service.test" options="-parameters" />
+      <module name="order-service" options="-parameters" />
+      <module name="order-service.main" options="-parameters" />
+      <module name="order-service.test" options="-parameters" />
       <module name="product-service" options="-parameters" />
       <module name="product-service.main" options="-parameters" />
       <module name="product-service.test" options="-parameters" />

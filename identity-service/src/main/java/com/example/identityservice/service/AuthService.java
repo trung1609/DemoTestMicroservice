@@ -44,6 +44,7 @@ public class AuthService {
         users.setPassword(passwordEncoder.encode(formRegister.getPassword()));
         users.setRoles(formRegister.getRoles());
         users.setPermissions(formRegister.getPermissions());
+        users.setEmail(formRegister.getEmail());
         userRepository.save(users);
         return "User registered successfully";
     }

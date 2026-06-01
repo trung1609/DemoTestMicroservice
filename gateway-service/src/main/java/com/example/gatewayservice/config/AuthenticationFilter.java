@@ -82,10 +82,15 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
                             }
                         }
 
+                        Long userId = claims.get("userId", Long.class);
+                        String email = claims.get("email", String.class);
+
                         ServerHttpRequest mutedRequest = exchange.getRequest().mutate()
                                 .header("X-Username", username)
                                 .header("X-Roles", rolesJson)
                                 .header("X-Permissions", permissionsJson)
+                                .header("X-UserId", userId.toString())
+                                .header("X-Email", email)
                                 .build();
                         ServerWebExchange mutedExchange = exchange.mutate().request(mutedRequest).build();
                         return chain.filter(mutedExchange);

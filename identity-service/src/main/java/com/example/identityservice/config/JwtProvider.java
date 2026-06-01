@@ -32,12 +32,12 @@ public class JwtProvider {
 
     public String generateAccessToken(Users user) {
         Date now = new Date();
-        String jti = UUID.randomUUID().toString();
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", user.getRoles());
         claims.put("permissions", user.getPermissions());
-        claims.put("jti", jti);
         claims.put("type", "access");
+        claims.put("userId", user.getId());
+        claims.put("email", user.getEmail());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getUsername())

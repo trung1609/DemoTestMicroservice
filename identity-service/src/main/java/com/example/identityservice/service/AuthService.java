@@ -1,6 +1,7 @@
 package com.example.identityservice.service;
 
 import com.example.identityservice.config.JwtProvider;
+import com.example.identityservice.config.UserPrincipal;
 import com.example.identityservice.dto.FormLogin;
 import com.example.identityservice.dto.FormRegister;
 import com.example.identityservice.dto.JwtResponse;
@@ -28,6 +29,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final StringRedisTemplate redisTemplate;
+    private final AuthenticationManager authenticationManager;
 
     @Value("${jwt.expiration_refresh_token}")
     private long expirationRefreshToken;
@@ -50,12 +52,13 @@ public class AuthService {
     }
 
     public JwtResponse login(FormLogin formLogin){
-        Users users = userRepository.findByUsername(formLogin.getUsername()).orElseThrow(
-                () -> new JwtException("Invalid username or password")
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(formLogin.getUsername(), formLogin.getPassword())
         );
-        if (!passwordEncoder.matches(formLogin.getPassword(), users.getPassword())){
-            throw new JwtException("Invalid username or password");
-        }
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
+        Users users = userPrincipal.getUser();
+
         String accessToken = jwtProvider.generateAccessToken(users);
         String refreshToken = jwtProvider.generateRefreshToken(users);
 
